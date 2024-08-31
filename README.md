@@ -1,5 +1,5 @@
 # stewd
 this is the README document of stewd (name subject to change)
-## game information
+## game information >
 ### general outline
 -test
