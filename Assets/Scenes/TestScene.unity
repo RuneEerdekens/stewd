@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 253299067}
   - component: {fileID: 253299066}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: moveParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5014,7 +5014,7 @@ Camera:
   near clip plane: 0.01
   far clip plane: 1000
   field of view: 70
-  orthographic: 1
+  orthographic: 0
   orthographic size: 7.96
   m_Depth: -1
   m_CullingMask:
@@ -5359,8 +5359,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 600
-  dashForce: 200
-  dashTime: 0.02
+  ResponsivenessSlider: 0.354
+  dashForce: 50
+  dashTime: 0.1
   dashCooldown: 1
   dashCharging: {fileID: 2100000, guid: 0a3ae124cd9c7f7408be61e7366ec94a, type: 2}
   dashCharged: {fileID: 2100000, guid: ec6adde1c579ffa4484fa8afc43d7450, type: 2}

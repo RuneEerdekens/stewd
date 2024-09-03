@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerCharacterController : MonoBehaviour
 {
 	public float moveSpeed;
+	[Range(0, 1)]
+	public float ResponsivenessSlider;
 
 	public float dashForce;
 	public float dashTime;
@@ -50,7 +52,7 @@ public class PlayerCharacterController : MonoBehaviour
 
 
 		Vector3 moveDir = new Vector3(x, 0, z).normalized * Time.deltaTime * moveSpeed;
-		rb.velocity = Vector3.Lerp(rb.velocity, moveDir, 0.65f);
+		rb.velocity = Vector3.Lerp(rb.velocity, moveDir, ResponsivenessSlider);
 	}
 
 	private void Dash()
