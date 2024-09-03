@@ -11,4 +11,4 @@ this is the README document of stewd (DEFO changing the name)
 top down dystopian overgrown robots + pixle art shader
 
 #### PROGRESION
-augment your weopons
+augment your weapons
