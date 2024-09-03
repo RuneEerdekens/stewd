@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerCharacterController : MonoBehaviour
 {
 	public float moveSpeed;
@@ -20,8 +21,8 @@ public class PlayerCharacterController : MonoBehaviour
 	private float lastDashTime;
 	private bool canMove = true;
 
-	public GameObject MoveEffect;
-	public GameObject DashIndicator;
+	public GameObject moveEffect;
+	public GameObject dashIndicator;
 
 	void Awake()
 	{
@@ -65,15 +66,15 @@ public class PlayerCharacterController : MonoBehaviour
 
 	private void MoveEffects()
     {
-		MoveEffect.GetComponent<ParticleSystem>().enableEmission = rb.velocity.magnitude > 1;
+		moveEffect.GetComponent<ParticleSystem>().enableEmission = rb.velocity.magnitude > 1;
 	}
 
 	private void DashEffect()
     {
 
 		float scaleFactor = Mathf.Clamp01((Time.time - lastDashTime) / dashCooldown);
-		DashIndicator.transform.localScale = Vector3.one * scaleFactor;
-		DashIndicator.GetComponent<Renderer>().material = scaleFactor >= 1 ? dashCharged : dashCharging;
+		dashIndicator.transform.localScale = Vector3.one * scaleFactor * 0.4f;
+		dashIndicator.GetComponent<Renderer>().material = scaleFactor >= 1 ? dashCharged : dashCharging;
 	}
 
 	private IEnumerator StartDashCD()

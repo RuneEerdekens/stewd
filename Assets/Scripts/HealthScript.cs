@@ -21,7 +21,6 @@ public class HealthScript : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        InvokeRepeating("DeathAwaits", 2, 2);
     }
 
     public float getCurrentHealth()
@@ -32,7 +31,6 @@ public class HealthScript : MonoBehaviour
     public void TakeDamage(float amount)
     {
         currentHealth -= amount;
-        Debug.Log($"Hit: {gameObject.name}, Health: {currentHealth}.");
 
         if (currentHealth <= 0)
         {
@@ -64,10 +62,5 @@ public class HealthScript : MonoBehaviour
     public void spawnDeathEffect()
     {
         Instantiate(deathEffect, transform.position, Quaternion.identity);
-    }
-
-    private void DeathAwaits()
-    {
-        TakeDamage(10);
     }
 }
