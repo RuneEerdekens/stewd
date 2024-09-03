@@ -7,8 +7,6 @@ public class EffectsController : MonoBehaviour
     public AnimationCurve shakeCurve;
     public float shakeDuration;
     public GameObject dashStartEffect;
-    public Material dashMat;
-
 
     public void DashStart()
     {

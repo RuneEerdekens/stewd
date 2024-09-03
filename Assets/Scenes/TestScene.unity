@@ -5741,7 +5741,6 @@ MonoBehaviour:
   shakeDuration: 0.15
   dashStartEffect: {fileID: 4666513520489881049, guid: d42baa6fd06cfec4dabae128747487b8,
     type: 3}
-  dashMat: {fileID: 2100000, guid: d5c5e75f0b2e91d469693cb0580c4de0, type: 2}
 --- !u!224 &573901911 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7524620275790200688, guid: e49e2d0ddd5f6cf44aa74052d77360cc,
