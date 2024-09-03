@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,9 @@ public class PlayerCharacterController : MonoBehaviour
 
 	public GameObject moveEffect;
 	public GameObject dashIndicator;
+
+	public UnityEvent onDash = new UnityEvent();
+	public UnityEvent onDashEnd = new UnityEvent();
 
 	void Awake()
 	{
@@ -58,6 +62,7 @@ public class PlayerCharacterController : MonoBehaviour
 
 	private void Dash()
     {
+		onDash.Invoke();
 		StartCoroutine(StartDashCD());
 		StartCoroutine(StartDashLockout());
 		lastDashTime = Time.time;
@@ -71,7 +76,6 @@ public class PlayerCharacterController : MonoBehaviour
 
 	private void DashEffect()
     {
-
 		float scaleFactor = Mathf.Clamp01((Time.time - lastDashTime) / dashCooldown);
 		dashIndicator.transform.localScale = Vector3.one * scaleFactor * 0.4f;
 		dashIndicator.GetComponent<Renderer>().material = scaleFactor >= 1 ? dashCharged : dashCharging;
@@ -89,5 +93,7 @@ public class PlayerCharacterController : MonoBehaviour
 		canMove = false;
 		yield return new WaitForSeconds(dashTime);
 		canMove = true;
+		yield return new WaitForSeconds(0.2f);
+		onDashEnd.Invoke();
 	}
 }
