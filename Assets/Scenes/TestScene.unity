@@ -5559,6 +5559,7 @@ GameObject:
   - component: {fileID: 570702535}
   - component: {fileID: 570702538}
   - component: {fileID: 570702539}
+  - component: {fileID: 570702540}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -5641,6 +5642,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 570702540}
+        m_TargetAssemblyTypeName: PlayerEvents, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   onDashEnd:
     m_PersistentCalls:
       m_Calls:
@@ -5689,10 +5702,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6a4520488becf47b3a891de0b9e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 20
+  primaryDamageAmount: 0
+  secondaryDamageAmount: 0
   hitbox: {fileID: 53212123}
-  attackCD: 1
-  attackTime: 0.1
+  pAttackCD: 0
+  pAttackTime: 0
+  sAttackCD: 0
+  sAttackTime: 0
+  primaryEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 570702540}
+        m_TargetAssemblyTypeName: PlayerEvents, Assembly-CSharp
+        m_MethodName: OnPrimaryAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  secondaryEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 570702540}
+        m_TargetAssemblyTypeName: PlayerEvents, Assembly-CSharp
+        m_MethodName: OnSecondaryAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &570702539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5741,6 +5787,27 @@ MonoBehaviour:
   shakeDuration: 0.15
   dashStartEffect: {fileID: 4666513520489881049, guid: d42baa6fd06cfec4dabae128747487b8,
     type: 3}
+--- !u!114 &570702540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570702534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1652ed75cff26144d8efc07e8c4d4e21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dashEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  primaryAttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  secondaryAttackEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!224 &573901911 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7524620275790200688, guid: e49e2d0ddd5f6cf44aa74052d77360cc,
