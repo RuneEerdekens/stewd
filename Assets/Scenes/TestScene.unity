@@ -5396,7 +5396,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5da3f2fe906664449b8eb059c7c59afd, type: 2}
+  - {fileID: 2100000, guid: d5c5e75f0b2e91d469693cb0580c4de0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5702,13 +5702,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a6a4520488becf47b3a891de0b9e6f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryDamageAmount: 0
-  secondaryDamageAmount: 0
+  primaryDamageAmount: 10
+  secondaryDamageAmount: 20
   hitbox: {fileID: 53212123}
-  pAttackCD: 0
-  pAttackTime: 0
-  sAttackCD: 0
-  sAttackTime: 0
+  pAttackCD: 1
+  pAttackTime: 0.1
+  sAttackCD: 2
+  sAttackTime: 0.1
   primaryEvent:
     m_PersistentCalls:
       m_Calls:
