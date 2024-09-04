@@ -14,8 +14,6 @@ public class HealthbarrScript : MonoBehaviour
 
     private void Start()
     {
-
-
         healthScript = gameObject.GetComponent<HealthScript>();
 
         healthScript.OnChangedMaxHealth += updateMaxHealth;
@@ -25,7 +23,6 @@ public class HealthbarrScript : MonoBehaviour
         Healthbar.fillRect.gameObject.GetComponent<Image>().color = HealthGradient.Evaluate(1);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (rotate)

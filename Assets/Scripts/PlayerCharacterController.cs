@@ -22,6 +22,8 @@ public class PlayerCharacterController : MonoBehaviour
 	private float lastDashTime;
 	private bool canMove = true;
 
+	[HideInInspector] public bool freezegame;
+
 	public GameObject moveEffect;
 	public GameObject dashIndicator;
 
@@ -40,17 +42,21 @@ public class PlayerCharacterController : MonoBehaviour
         {
 			Move();
 		}
-        if (Input.GetKey(KeyCode.Space) && canDash && rb.velocity.magnitude > 1)
-        {
+	}
+
+    private void Update()
+    {
+		if (Input.GetKeyDown(KeyCode.Space) && canDash && rb.velocity.magnitude > 1)
+		{
 			Dash();
-        }
+		}
 
 		MoveEffects();
 		DashEffect();
 	}
 
 
-	private void Move()
+    private void Move()
     {
 		float x = Input.GetAxisRaw("Horizontal");
 		float z = Input.GetAxisRaw("Vertical");
