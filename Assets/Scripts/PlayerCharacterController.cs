@@ -25,7 +25,7 @@ public class PlayerCharacterController : MonoBehaviour
 	public GameObject moveEffect;
 	public GameObject dashIndicator;
 
-	public UnityEvent onDash = new UnityEvent();
+	public UnityEvent<Vector3> onDash = new UnityEvent<Vector3>();
 	public UnityEvent onDashEnd = new UnityEvent();
 
 	void Awake()
@@ -62,7 +62,7 @@ public class PlayerCharacterController : MonoBehaviour
 
 	private void Dash()
     {
-		onDash.Invoke();
+		onDash.Invoke(transform.position);
 		StartCoroutine(StartDashCD());
 		StartCoroutine(StartDashLockout());
 		lastDashTime = Time.time;

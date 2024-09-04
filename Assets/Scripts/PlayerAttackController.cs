@@ -1,43 +1,82 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAttackController : MonoBehaviour
 {
-    public float damageAmount;
+    public float primaryDamageAmount;
+    public float secondaryDamageAmount;
 
     public GameObject hitbox;
-    public float attackCD;
-    public float attackTime;
+    public float pAttackCD;
+    public float pAttackTime;
 
-    private bool canAttack = true;
+    public float sAttackCD;
+    public float sAttackTime;
+
+    public UnityEvent<Vector3, GameObject> primaryEvent = new UnityEvent<Vector3, GameObject>();
+    public UnityEvent<Vector3, GameObject> secondaryEvent = new UnityEvent<Vector3, GameObject>();
+
+    private bool canPAttack = true;
+    private bool canSAttack = true;
+    private bool isAttacking = false;
 
     void Update()
     {
         RotatePlayer();
-        if (canAttack && Input.GetMouseButton(0))
+        if (canPAttack && Input.GetMouseButtonDown(0) && !isAttacking) //only primary attack when you can primary attack, hit mouse 0 and are not secondary attacking
         {
-            Attack();
+            PAttack();
+        }
+
+        if (canSAttack && Input.GetMouseButtonDown(1) && !isAttacking)
+        {
+            SAttack();
         }
     }
 
-    private void Attack()
+    private void PAttack()
     {
-        StartCoroutine(AttackCd());
-        StartCoroutine(Swing());
+        StartCoroutine(PAttackCd());
+        StartCoroutine(PSwing());
     }
 
-    private IEnumerator AttackCd()
+    private void SAttack()
     {
-        canAttack = false;
-        yield return new WaitForSeconds(attackCD);
-        canAttack = true;
+        StartCoroutine(SAttackCd());
+        StartCoroutine(SSwing());
     }
 
-    private IEnumerator Swing()
+    private IEnumerator PAttackCd()
     {
+        canPAttack = false;
+        yield return new WaitForSeconds(pAttackCD);
+        canPAttack = true;
+    }
+
+    private IEnumerator PSwing()
+    {
+        isAttacking = true;
         hitbox.SetActive(true);
-        yield return new WaitForSeconds(attackTime);
+        yield return new WaitForSeconds(pAttackTime);
+        isAttacking = false;
+        hitbox.SetActive(false);
+    }
+
+    private IEnumerator SAttackCd()
+    {
+        canSAttack = false;
+        yield return new WaitForSeconds(sAttackCD);
+        canSAttack = true;
+    }
+
+    private IEnumerator SSwing()
+    {
+        isAttacking = true;
+        hitbox.SetActive(true);
+        yield return new WaitForSeconds(sAttackTime);
+        isAttacking = false;
         hitbox.SetActive(false);
     }
 
@@ -45,7 +84,17 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (other.tag.Equals("Enemie"))
         {
-            other.GetComponent<HealthScript>().TakeDamage(damageAmount);
+            Vector3 contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+            if (!canPAttack && canSAttack)
+            {
+                primaryEvent.Invoke(contactPoint, other.gameObject);
+                other.GetComponent<HealthScript>().TakeDamage(primaryDamageAmount);
+            }
+            else if(canPAttack && !canSAttack)
+            {
+                secondaryEvent.Invoke(contactPoint, other.gameObject);
+                other.GetComponent<HealthScript>().TakeDamage(secondaryDamageAmount);
+            }
         }
     }
 
