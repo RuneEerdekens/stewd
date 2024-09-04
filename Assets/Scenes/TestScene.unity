@@ -5708,7 +5708,7 @@ MonoBehaviour:
   pAttackCD: 1
   pAttackTime: 0.1
   sAttackCD: 2
-  sAttackTime: 0.1
+  sAttackTime: 0.2
   primaryEvent:
     m_PersistentCalls:
       m_Calls:

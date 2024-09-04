@@ -85,12 +85,12 @@ public class PlayerAttackController : MonoBehaviour
         if (other.tag.Equals("Enemie"))
         {
             Vector3 contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
-            if (!canPAttack && canSAttack)
+            if (!canPAttack)
             {
                 primaryEvent.Invoke(contactPoint, other.gameObject);
                 other.GetComponent<HealthScript>().TakeDamage(primaryDamageAmount);
             }
-            else if(canPAttack && !canSAttack)
+            else if(!canSAttack)
             {
                 secondaryEvent.Invoke(contactPoint, other.gameObject);
                 other.GetComponent<HealthScript>().TakeDamage(secondaryDamageAmount);
