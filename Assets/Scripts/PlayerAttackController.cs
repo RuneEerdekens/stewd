@@ -15,8 +15,8 @@ public class PlayerAttackController : MonoBehaviour
     public float sAttackCD;
     public float sAttackTime;
 
-    public UnityEvent<Vector3, GameObject> primaryEvent = new UnityEvent<Vector3, GameObject>();
-    public UnityEvent<Vector3, GameObject> secondaryEvent = new UnityEvent<Vector3, GameObject>();
+    public UnityEvent<Vector3> primaryEvent = new UnityEvent<Vector3>();
+    public UnityEvent<Vector3> secondaryEvent = new UnityEvent<Vector3>();
 
     private bool canPAttack = true;
     private bool canSAttack = true;
@@ -87,12 +87,12 @@ public class PlayerAttackController : MonoBehaviour
             Vector3 contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
             if (!canPAttack)
             {
-                primaryEvent.Invoke(contactPoint, other.gameObject);
+                primaryEvent.Invoke(contactPoint);
                 other.GetComponent<HealthScript>().TakeDamage(primaryDamageAmount);
             }
             else if(!canSAttack)
             {
-                secondaryEvent.Invoke(contactPoint, other.gameObject);
+                secondaryEvent.Invoke(contactPoint);
                 other.GetComponent<HealthScript>().TakeDamage(secondaryDamageAmount);
             }
         }

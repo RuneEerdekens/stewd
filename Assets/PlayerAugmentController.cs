@@ -10,10 +10,11 @@ public class PlayerAugmentController : MonoBehaviour
     public GameObject menuScreen;
     private bool isUiActive;
 
+    public PrimaryAttackAugmentBase pAugment;
+
     private void Awake()
     {
         eventScript = gameObject.GetComponent<PlayerEvents>();
-
     }
 
     private void Update()
@@ -26,12 +27,6 @@ public class PlayerAugmentController : MonoBehaviour
 
     public void add()
     {
-        eventScript.dashEvent.AddListener(test);
-        print("test");
-    }
-
-    void test(Vector3 _)
-    {
-        print("hallo");
+        eventScript.primaryAttackEvent.AddListener(pAugment.StartPrimaryEffect);
     }
 }

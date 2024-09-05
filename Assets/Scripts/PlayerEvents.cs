@@ -16,13 +16,13 @@ public class PlayerEvents : MonoBehaviour
         print("Dashing..");
     }
 
-    public void OnPrimaryAttack(Vector3 impactPos, GameObject target)
+    public void OnPrimaryAttack(Vector3 impactPos)
     {
         primaryAttackEvent.Invoke(impactPos);
         print("Primary attacking..");
     }
 
-    public void OnSecondaryAttack(Vector3 impactPos, GameObject target)
+    public void OnSecondaryAttack(Vector3 impactPos)
     {
         secondaryAttackEvent.Invoke(impactPos);
         print("Secondary attacking..");
