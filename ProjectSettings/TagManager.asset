@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemie
+  - DashAugment
+  - PrimaryAugment
+  - SecondaryAugment
   layers:
   - Default
   - TransparentFX
