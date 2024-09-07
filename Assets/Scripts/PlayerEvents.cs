@@ -3,12 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(PlayerCharacterController))]
+[RequireComponent(typeof(PlayerAttackController))]
 public class PlayerEvents : MonoBehaviour
 {
 
     public UnityEvent<Vector3> dashEvent = new UnityEvent<Vector3>();
-    public UnityEvent<Vector3> primaryAttackEvent = new UnityEvent<Vector3>();
-    public UnityEvent<Vector3> secondaryAttackEvent = new UnityEvent<Vector3>();
+    public UnityEvent<PlayerImpact> primaryAttackEvent = new UnityEvent<PlayerImpact>();
+    public UnityEvent<PlayerImpact> secondaryAttackEvent = new UnityEvent<PlayerImpact>();
+
+
+    private void Start()
+    {
+        GetComponent<PlayerCharacterController>().onDash.AddListener(OnDash);
+
+        PlayerAttackController attackController = GetComponent<PlayerAttackController>();
+        attackController.primaryEvent.AddListener(OnPrimaryAttack);
+        attackController.secondaryEvent.AddListener(OnSecondaryAttack);
+    }
 
     public void OnDash(Vector3 pos)
     {
@@ -16,15 +28,15 @@ public class PlayerEvents : MonoBehaviour
         print("Dashing..");
     }
 
-    public void OnPrimaryAttack(Vector3 impactPos)
+    public void OnPrimaryAttack(PlayerImpact info)
     {
-        primaryAttackEvent.Invoke(impactPos);
+        primaryAttackEvent.Invoke(info);
         print("Primary attacking..");
     }
 
-    public void OnSecondaryAttack(Vector3 impactPos)
+    public void OnSecondaryAttack(PlayerImpact info)
     {
-        secondaryAttackEvent.Invoke(impactPos);
+        secondaryAttackEvent.Invoke(info);
         print("Secondary attacking..");
     }
 

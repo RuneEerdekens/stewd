@@ -17,8 +17,8 @@ public class PlayerAttackController : MonoBehaviour
     public float sAttackCD;
     public float sAttackTime;
 
-    public UnityEvent<Vector3> primaryEvent = new UnityEvent<Vector3>();
-    public UnityEvent<Vector3> secondaryEvent = new UnityEvent<Vector3>();
+    public UnityEvent<PlayerImpact> primaryEvent = new UnityEvent<PlayerImpact>();
+    public UnityEvent<PlayerImpact> secondaryEvent = new UnityEvent<PlayerImpact>();
 
     private bool canPAttack = true;
     private bool canSAttack = true;
@@ -27,6 +27,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private bool canAttack = true;
     private bool isAttacking = false;
+
 
     void Update()
     {
@@ -104,14 +105,17 @@ public class PlayerAttackController : MonoBehaviour
         if (other.tag.Equals("Enemie"))
         {
             Vector3 contactPoint = other.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
+
+            PlayerImpact info = new PlayerImpact(contactPoint, other.gameObject);
+
             if (isPAttacking)
             {
-                primaryEvent.Invoke(contactPoint);
+                primaryEvent.Invoke(info);
                 other.GetComponent<HealthScript>().TakeDamage(primaryDamageAmount);
             }
             else if(isSAttacking)
             {
-                secondaryEvent.Invoke(contactPoint);
+                secondaryEvent.Invoke(info);
                 other.GetComponent<HealthScript>().TakeDamage(secondaryDamageAmount);
             }
         }

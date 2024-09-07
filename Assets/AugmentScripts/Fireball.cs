@@ -12,19 +12,15 @@ public class Fireball : PrimaryAttackAugmentBase
     [SerializeField]
     public float radius;
 
-    public override void StartPrimaryEffect(Vector3 impactPos)
+    public override void StartPrimaryEffect(PlayerImpact info)
     {
-        GameObject t = Instantiate(fireBallEffect, impactPos, Quaternion.identity);
+        GameObject t = Instantiate(fireBallEffect, info.impactPos, fireBallEffect.transform.rotation);
         t.transform.localScale = Vector3.one * radius;
         Destroy(t, 3);
-        Collider[] cols = Physics.OverlapSphere(impactPos, radius);
 
-        foreach (Collider col in cols)
+        if (info.hitObj.CompareTag("Enemie"))
         {
-            if (col.CompareTag("Enemie"))
-            {
-                col.gameObject.GetComponent<HealthScript>().TakeDamage(damage);
-            }
+            info.hitObj.GetComponent<HealthScript>().TakeDamage(damage);
         }
     }
 }

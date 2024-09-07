@@ -10,11 +10,11 @@ public class PlayerAugmentController : MonoBehaviour
     public GameObject menuScreen;
     private bool isUiActive;
 
-    private List<DashAugmentBase> dashAugments = new List<DashAugmentBase>();
-    private List<PrimaryAttackAugmentBase> primaryAttackAugments = new List<PrimaryAttackAugmentBase>();
-    private List<SecondaryAttackAugmentBase> secondaryAttackAugments = new List<SecondaryAttackAugmentBase>();
+    private Dictionary<string, DashAugmentBase> dashAugments = new Dictionary<string, DashAugmentBase>();
+    private Dictionary<string, PrimaryAttackAugmentBase> primaryAttackAugments = new Dictionary<string, PrimaryAttackAugmentBase>();
+    private Dictionary<string, SecondaryAttackAugmentBase> secondaryAttackAugments = new Dictionary<string, SecondaryAttackAugmentBase>();
 
-
+    //we store augemnts in dicts with the id as key and augment object itselve as value
 
     private void Awake()
     {
@@ -33,36 +33,36 @@ public class PlayerAugmentController : MonoBehaviour
     {
         if (augment is DashAugmentBase dashAugment)
         {
-            dashAugments.Add(dashAugment);
+            dashAugments[dashAugment.ID] = dashAugment;
             eventScript.dashEvent.AddListener(dashAugment.StartDashEffect);
         }
         else if (augment is PrimaryAttackAugmentBase primaryAttackAugment)
         {
-            primaryAttackAugments.Add(primaryAttackAugment);
+            primaryAttackAugments[primaryAttackAugment.ID] = primaryAttackAugment;
             eventScript.primaryAttackEvent.AddListener(primaryAttackAugment.StartPrimaryEffect);
         }
         else if (augment is SecondaryAttackAugmentBase secondaryAttackAugment)
         {
-            secondaryAttackAugments.Add(secondaryAttackAugment);
+            secondaryAttackAugments[secondaryAttackAugment.ID] = secondaryAttackAugment;
             eventScript.secondaryAttackEvent.AddListener(secondaryAttackAugment.StartSecondaryAttack);
         }
     }
 
     public void RemoveAugmentFromSlot(ScriptableObject augment)
     {
-        if (augment is DashAugmentBase dashAugment)
+        if (augment is DashAugmentBase dashAugment && dashAugments.ContainsKey(dashAugment.ID))
         {
-            dashAugments.Remove(dashAugment);
+            dashAugments.Remove(dashAugment.ID);
             eventScript.dashEvent.RemoveListener(dashAugment.StartDashEffect);
         }
-        else if (augment is PrimaryAttackAugmentBase primaryAttackAugment)
+        else if (augment is PrimaryAttackAugmentBase primaryAttackAugment && primaryAttackAugments.ContainsKey(primaryAttackAugment.ID))
         {
-            primaryAttackAugments.Remove(primaryAttackAugment);
+            primaryAttackAugments.Remove(primaryAttackAugment.ID);
             eventScript.primaryAttackEvent.RemoveListener(primaryAttackAugment.StartPrimaryEffect);
         }
-        else if (augment is SecondaryAttackAugmentBase secondaryAttackAugment)
+        else if (augment is SecondaryAttackAugmentBase secondaryAttackAugment && secondaryAttackAugments.ContainsKey(secondaryAttackAugment.ID))
         {
-            secondaryAttackAugments.Remove(secondaryAttackAugment);
+            secondaryAttackAugments.Remove(secondaryAttackAugment.ID);
             eventScript.secondaryAttackEvent.RemoveListener(secondaryAttackAugment.StartSecondaryAttack);
         }
     }
