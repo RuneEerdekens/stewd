@@ -3,7 +3,6 @@ using UnityEngine.EventSystems;
 
 public class AugmentSlot : ISlot
 {
-    public string augmentCat; // Category of augment this slot accepts
     private PlayerAugmentController augmentController; // Reference to the controller managing augments
     private Augment currentAugment; // The augment currently assigned to this slot
 
@@ -15,7 +14,7 @@ public class AugmentSlot : ISlot
     public override void OnDrop(PointerEventData eventData)
     {
         Augment draggable = eventData.pointerDrag.GetComponent<Augment>();
-        if (draggable != null && draggable.assignedAugment != null && augmentCat == draggable.tag)
+        if (draggable != null && draggable.assignedAugment != null && CompareTag(draggable.tag))
         {
             // Handle the drop
             ApplyAugment(draggable);

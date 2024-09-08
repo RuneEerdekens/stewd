@@ -47,7 +47,21 @@ public class Augment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
         Augment droppedAugment = eventData.pointerDrag.GetComponent<Augment>();
         if (droppedAugment != null && droppedAugment != this)
         {
-            SwapWith(droppedAugment);
+
+            //swap if neither augments are in an augslot else only swap if they are the same type
+            if(currentSlot is not AugmentSlot && droppedAugment.currentSlot is not AugmentSlot) 
+            {
+                SwapWith(droppedAugment);
+            }
+            else if(CompareTag(droppedAugment.tag))
+            {
+                SwapWith(droppedAugment);
+            }
+            else //we tried to swap but 1 of the 2 was in a slot so we need to reapply the augment to its current slot
+            {
+                currentSlot.ApplyAugment(this);
+                droppedAugment.currentSlot.ApplyAugment(droppedAugment);
+            }
         }
     }
 
@@ -71,5 +85,15 @@ public class Augment : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragH
 
         currentSlot.ApplyAugment(this);
         otherAugment.currentSlot.ApplyAugment(otherAugment);
+    }
+
+    private void OnDisable()
+    {
+        if (!thisImage.raycastTarget)
+        {
+            currentSlot.ApplyAugment(this);
+            thisImage.raycastTarget = true;
+            transform.position = startPos;
+        }
     }
 }

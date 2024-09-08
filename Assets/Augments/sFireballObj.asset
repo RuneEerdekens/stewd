@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c98e296a6d575964790aa2d0b8af3db6, type: 3}
+  m_Name: sFireballObj
+  m_EditorClassIdentifier: 
+  id: 
+  damage: 20
+  fireBallEffect: {fileID: 8322045545658871860, guid: 71ce54ee65ca554428f2186f52df96e6,
+    type: 3}
+  radius: 1
