@@ -53,3 +53,48 @@ public struct PlayerImpact
         this.hitObj = hitObj;
     }
 }
+
+
+public struct Node<T>
+{
+    public bool isRoot { get; }
+    public T data { get; }
+    public int level { get; }
+
+    public Node(T data, int level, bool isRoot = false)
+    {
+        this.data = data;
+        this.level = level;
+        this.isRoot = isRoot;
+    }
+}
+
+public struct DungeonNode
+{
+    public Node<GameObject> dNode { get; }
+    public List<Node<GameObject>> childNodes { get;}
+
+    public DungeonNode(Node<GameObject> currNode, List<Node<GameObject>> childNodes)
+    {
+        this.dNode = currNode;
+        this.childNodes = childNodes;
+    }
+
+
+    public int GetCurrLevel()
+    {
+        return dNode.level;
+    }
+
+    public int getChildCount()
+    {
+        return childNodes.Count;
+    }
+
+    public int getChildLevel()
+    {
+        return childNodes[0].level;
+    }
+}
+
+
