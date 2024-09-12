@@ -54,47 +54,92 @@ public struct PlayerImpact
     }
 }
 
-
 public struct Node<T>
 {
-    public bool isRoot { get; }
-    public T data { get; }
-    public int level { get; }
+    public T data;  // The actual data of the node (e.g., a room, value, etc.)
+    public int level;  // The level of the node in the graph
+    public List<Node<T>> children;  // List of child nodes (branches)
+    public List<Node<T>> parents;   // List of parent nodes (for shared nodes)
 
-    public Node(T data, int level, bool isRoot = false)
+    public Node(T data, int level)
     {
         this.data = data;
         this.level = level;
-        this.isRoot = isRoot;
+        this.children = new List<Node<T>>();
+        this.parents = new List<Node<T>>();
+    }
+
+    // Add a child connection
+    public void AddChild(Node<T> child)
+    {
+        if (!children.Contains(child))
+        {
+            children.Add(child);
+            child.parents.Add(this); // Add this node as a parent of the child
+        }
     }
 }
 
-public struct DungeonNode
+public class Graph<T>
 {
-    public Node<GameObject> dNode { get; }
-    public List<Node<GameObject>> childNodes { get;}
+    public Node<T> startNode;  // The start node of the graph
+    public Node<T> endNode;    // The end node of the graph
+    public List<List<Node<T>>> levels;  // List of levels, where each level contains nodes
 
-    public DungeonNode(Node<GameObject> currNode, List<Node<GameObject>> childNodes)
+    public Graph(T startData, T endData, int numLevels)
     {
-        this.dNode = currNode;
-        this.childNodes = childNodes;
+        // Initialize the levels
+        levels = new List<List<Node<T>>>();
+
+        // Create start node at level 0
+        startNode = new Node<T>(startData, 0);
+        levels.Add(new List<Node<T>> { startNode });
+
+        // Initialize levels up to numLevels - 1 (since level 0 is the start)
+        for (int i = 1; i < numLevels; i++)
+        {
+            levels.Add(new List<Node<T>>());
+        }
+
+        // Create end node at the last level
+        endNode = new Node<T>(endData, numLevels);
+        levels.Add(new List<Node<T>> { endNode });
     }
 
-
-    public int GetCurrLevel()
+    // Add a node to a specific level
+    public Node<T> AddNodeToLevel(T data, int level)
     {
-        return dNode.level;
+        if (level < 0 || level >= levels.Count)
+            throw new System.ArgumentException("Invalid level");
+
+        Node<T> newNode = new Node<T>(data, level);
+        levels[level].Add(newNode);
+        return newNode;
     }
 
-    public int getChildCount()
+    // Connect two nodes, parent to child
+    public void ConnectNodes(Node<T> parent, Node<T> child)
     {
-        return childNodes.Count;
+        if (child.level != parent.level + 1)
+            throw new System.ArgumentException("Child must be exactly one level below the parent");
+
+        parent.AddChild(child);
     }
 
-    public int getChildLevel()
+    // Print the graph (for debugging purposes)
+    public void PrintGraph()
     {
-        return childNodes[0].level;
+        for (int i = 0; i < levels.Count; i++)
+        {
+            Debug.Log($"Level {i}: ");
+            foreach (var node in levels[i])
+            {
+                Debug.Log($"Node: {node.data}, Children: {node.children.Count}");
+            }
+        }
     }
 }
+
+
 
 

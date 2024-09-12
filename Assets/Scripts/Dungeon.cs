@@ -1,83 +1,77 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Dungeon
 {
-    int maxLevels;
-    int maxChildCount;
+    public Graph<GameObject> graph;
 
-    DungeonNode rootNode;
-
-    List<GameObject> roomPrefabs;
-
-    List<DungeonNode> dungeonTree = new List<DungeonNode>();
-
-    public Dungeon(int maxLevels, int maxChildCount, List<GameObject> rooms)
+    public Dungeon(List<GameObject> roomPrefabs, int maxLevels, int maxChildrenPerNode, int maxWidthPerLevel, float widthVariance)
     {
-        this.maxLevels = maxLevels;
-        this.maxChildCount = maxChildCount;
-        this.roomPrefabs = rooms;
-
-        // Generate the root node and start the tree generation
-        this.rootNode = GenerateRootNode(0);
-        dungeonTree.Add(rootNode);
-
-        // Start generating the tree
-        GenerateTree(rootNode, 1);  // Start from level 1, root is level 0
-        dungeonTree = dungeonTree.OrderBy(node => node.GetCurrLevel()).ToList();
+        graph = new Graph<GameObject>(roomPrefabs[0], roomPrefabs[roomPrefabs.Count - 1], maxLevels);
+        GenerateGraph(roomPrefabs, maxLevels, maxChildrenPerNode, maxWidthPerLevel, widthVariance);
     }
 
-    private DungeonNode GenerateRootNode(int level)
+    private void GenerateGraph(List<GameObject> roomPrefabs, int maxLevels, int maxChildrenPerNode, int maxWidthPerLevel, float widthVariance)
     {
-        Node<GameObject> currNode = new Node<GameObject>(null, level, true);
-        return new DungeonNode(currNode, GenerateChildNotes(level + 1));
-    }
+        Dictionary<int, List<Node<GameObject>>> nodesAtLevels = new Dictionary<int, List<Node<GameObject>>>();
 
-    private List<Node<GameObject>> GenerateChildNotes(int currLevel)
-    {
-        // Stop generating further child nodes if we reached maxLevels
-        if (currLevel >= maxLevels) return new List<Node<GameObject>>();
-
-        List<Node<GameObject>> childNodes = new List<Node<GameObject>>();
-
-        // Always generate at least one child
-        int childNodesCount = UnityEngine.Random.Range(1, maxChildCount + 1);
-
-        for (int i = 0; i < childNodesCount; i++)
+        for (int i = 0; i < maxLevels; i++)
         {
-            Node<GameObject> newNode = new Node<GameObject>(null, currLevel);
-            childNodes.Add(newNode);
+            nodesAtLevels[i] = new List<Node<GameObject>>();
         }
 
-        return childNodes;
-    }
+        nodesAtLevels[0].Add(graph.startNode);
 
-    // Recursive function to generate tree down to maxLevels
-    private void GenerateTree(DungeonNode parentNode, int currLevel)
-    {
-        // Stop if we reached the max level
-        if (currLevel >= maxLevels) return;
-
-        foreach (Node<GameObject> childNode in parentNode.childNodes)
+        for (int i = 0; i < maxLevels - 1; i++)
         {
-            // Create a new DungeonNode for the child
-            DungeonNode newDungeonNode = new DungeonNode(childNode, GenerateChildNotes(currLevel + 1));
-            dungeonTree.Add(newDungeonNode);
+            int currentLevelNodeCount = 0;
+            int levelWidth = Mathf.RoundToInt(maxWidthPerLevel + Random.Range(-widthVariance, widthVariance));
+            levelWidth = Mathf.Clamp(levelWidth, 1, maxWidthPerLevel); // Ensure at least 1 and at most maxWidthPerLevel nodes
 
-            Debug.Log($"new dungeonNode L:{childNode.level}");
+            foreach (var node in nodesAtLevels[i])
+            {
+                int childrenCount = Random.Range(1, maxChildrenPerNode + 1);
+                bool hasChild = false;
 
-            // Recursively generate the tree for each child node
-            GenerateTree(newDungeonNode, currLevel + 1);
+                for (int j = 0; j < childrenCount; j++)
+                {
+                    if (currentLevelNodeCount >= levelWidth)
+                        break;
+
+                    GameObject childPrefab = roomPrefabs[Random.Range(0, roomPrefabs.Count)];
+                    Node<GameObject> childNode = graph.AddNodeToLevel(childPrefab, i + 1);
+
+                    if (Random.value < 0.3f && i > 0 && nodesAtLevels[i].Count > 1)
+                    {
+                        Node<GameObject> randomParent = nodesAtLevels[i][Random.Range(0, nodesAtLevels[i].Count)];
+                        graph.ConnectNodes(randomParent, childNode);
+                    }
+
+                    graph.ConnectNodes(node, childNode);
+
+                    if (!nodesAtLevels.ContainsKey(i + 1))
+                    {
+                        nodesAtLevels[i + 1] = new List<Node<GameObject>>();
+                    }
+
+                    nodesAtLevels[i + 1].Add(childNode);
+                    currentLevelNodeCount++;
+                    hasChild = true;
+                }
+
+                // Ensure each node has at least one child
+                if (!hasChild && nodesAtLevels[i + 1].Count > 0)
+                {
+                    Node<GameObject> fallbackChild = nodesAtLevels[i + 1][Random.Range(0, nodesAtLevels[i + 1].Count)];
+                    graph.ConnectNodes(node, fallbackChild);
+                }
+            }
         }
-    }
 
-    public void PrintTree()
-    {
-        foreach (DungeonNode node in dungeonTree)
+        // Ensure the last level nodes are connected to the end node
+        foreach (var node in nodesAtLevels[maxLevels - 1])
         {
-            Debug.Log($"Node Level: {node.GetCurrLevel()}, ROOT?: {node.dNode.isRoot}");
+            graph.ConnectNodes(node, graph.endNode);
         }
     }
 }
