@@ -8,6 +8,9 @@ public class PlayerAugmentController : MonoBehaviour
 {
     private PlayerEvents eventScript;
     public GameObject menuScreen;
+    [HideInInspector]
+    public bool canChangeAugment = false;
+
     private bool isUiActive;
 
     private Dictionary<string, DashAugmentBase> dashAugments = new Dictionary<string, DashAugmentBase>();
@@ -23,10 +26,13 @@ public class PlayerAugmentController : MonoBehaviour
 
     private void Update()
     {
-        isUiActive = Input.GetKey(KeyCode.E);
-        menuScreen.SetActive(isUiActive);
-        GetComponent<PlayerAttackController>().enabled = !isUiActive;
-        Time.timeScale = isUiActive ? 0 : 1;
+        if(canChangeAugment)
+        {
+            isUiActive = Input.GetKey(KeyCode.E);
+            menuScreen.SetActive(isUiActive);
+            GetComponent<PlayerAttackController>().enabled = !isUiActive;
+            Time.timeScale = isUiActive ? 0 : 1;
+        }
     }
 
     public void AssignAugmentToSlot(ScriptableObject augment)
